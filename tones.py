@@ -136,3 +136,5 @@ PROMPT_MAP = {
     "informal": informal_tone,
     "encouraging": encouraging_tone
 }
+
+LEVELS = ["beginner", "intermediate", "advanced"]
