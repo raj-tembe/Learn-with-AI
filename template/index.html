@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn with AI - Intelligent Learning Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>Learn AI</h1>
+                </div>
+                <p class="tagline">Your Personal Learning Assistant</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-tab="setup">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Setup</span>
+                </button>
+                <button class="nav-btn" data-tab="documents">
+                    <i class="fas fa-file-upload"></i>
+                    <span>Documents</span>
+                </button>
+                <button class="nav-btn" data-tab="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </button>
+                <button class="nav-btn" data-tab="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="reset-btn" onclick="resetSession()">
+                    <i class="fas fa-redo"></i>
+                    <span>New Session</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Setup Tab -->
+            <section id="setup" class="tab-content active">
+                <div class="tab-header">
+                    <h2><i class="fas fa-sliders-h"></i> Setup Your Learning Preferences</h2>
+                    <p>Configure your AI assistant's tone and your learning level</p>
+                </div>
+
+                <div class="setup-grid">
+                    <!-- Tone Selection -->
+                    <div class="setup-card">
+                        <div class="card-header">
+                            <i class="fas fa-microphone"></i>
+                            <h3>AI Tone</h3>
+                        </div>
+                        <p class="card-description">Choose how the AI should communicate with you</p>
+                        <div class="tone-options">
+                            {% for tone in tones %}
+                            <button class="tone-btn" data-tone="{{ tone }}" onclick="selectTone('{{ tone }}')">
+                                <span class="tone-icon">
+                                    {% if tone == 'default' %}
+                                        <i class="fas fa-balance-scale"></i>
+                                    {% elif tone == 'professional' %}
+                                        <i class="fas fa-briefcase"></i>
+                                    {% elif tone == 'informal' %}
+                                        <i class="fas fa-thumbs-up"></i>
+                                    {% elif tone == 'encouraging' %}
+                                        <i class="fas fa-star"></i>
+                                    {% endif %}
+                                </span>
+                                <span class="tone-name">{{ tone|capitalize }}</span>
+                                <span class="tone-desc">
+                                    {% if tone == 'default' %}
+                                        Balanced approach
+                                    {% elif tone == 'professional' %}
+                                        Academic & technical
+                                    {% elif tone == 'informal' %}
+                                        Friendly & casual
+                                    {% elif tone == 'encouraging' %}
+                                        Motivating & supportive
+                                    {% endif %}
+                                </span>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Level Selection -->
+                    <div class="setup-card">
+                        <div class="card-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Learning Level</h3>
+                        </div>
+                        <p class="card-description">Select your expertise level</p>
+                        <div class="level-options">
+                            {% for level in levels %}
+                            <button class="level-btn" data-level="{{ level }}" onclick="selectLevel('{{ level }}')">
+                                <span class="level-icon">
+                                    {% if level == 'beginner' %}
+                                        <i class="fas fa-seedling"></i>
+                                    {% elif level == 'intermediate' %}
+                                        <i class="fas fa-mountain"></i>
+                                    {% elif level == 'advanced' %}
+                                        <i class="fas fa-rocket"></i>
+                                    {% endif %}
+                                </span>
+                                <span class="level-name">{{ level|capitalize }}</span>
+                                <span class="level-desc">
+                                    {% if level == 'beginner' %}
+                                        Starting out
+                                    {% elif level == 'intermediate' %}
+                                        Some experience
+                                    {% elif level == 'advanced' %}
+                                        Expert level
+                                    {% endif %}
+                                </span>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>Your preferences will be applied to all responses. You can change them at any time!</p>
+                </div>
+            </section>
+
+            <!-- Documents Tab -->
+            <section id="documents" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-file-upload"></i> Document Management</h2>
+                    <p>Upload documents or add wiki links for AI to learn from</p>
+                </div>
+
+                <div class="documents-container">
+                    <!-- Upload Section -->
+                    <div class="upload-section">
+                        <div class="upload-card">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Upload Documents</h3>
+                            <p>Supported formats: PDF, TXT, CSV, JSON</p>
+                            <div class="upload-area" id="uploadArea">
+                                <input type="file" id="fileInput" multiple accept=".pdf,.txt,.csv,.json" hidden>
+                                <i class="fas fa-plus"></i>
+                                <p>Click to browse or drag files here</p>
+                                <span class="file-size-note">Max 50MB per file</span>
+                            </div>
+                            <button class="btn btn-primary mt-3" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-folder-open"></i> Select Files
+                            </button>
+                        </div>
+
+                        <div class="divider">
+                            <span>OR</span>
+                        </div>
+
+                        <div class="wiki-card">
+                            <div class="wiki-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3>Add Wiki Link</h3>
+                            <p>Add Wikipedia or other wiki links</p>
+                            <div class="wiki-input-group">
+                                <input type="url" id="wikiInput" placeholder="https://en.wikipedia.org/wiki/..." class="wiki-input">
+                                <button class="btn btn-secondary" onclick="addWikiLink()">
+                                    <i class="fas fa-plus"></i> Add Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documents List -->
+                    <div class="documents-list-section">
+                        <h3>Uploaded Documents</h3>
+                        <div id="documentsList" class="documents-list">
+                            <p class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                No documents uploaded yet
+                            </p>
+                        </div>
+
+                        <div id="ingestStatus" class="ingest-status" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Processing documents...</p>
+                        </div>
+
+                        <button class="btn btn-success btn-large" onclick="ingestDocuments()" id="ingestBtn" style="display: none;">
+                            <i class="fas fa-check"></i> Ingest & Process Documents
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>After uploading documents, click "Ingest & Process" to prepare them for AI learning.</p>
+                </div>
+            </section>
+
+            <!-- Chat Tab -->
+            <section id="chat" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-comments"></i> Chat with AI</h2>
+                    <p>Ask questions about your documents</p>
+                </div>
+
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="chat-welcome">
+                            <i class="fas fa-robot"></i>
+                            <h3>Welcome to Learn with AI</h3>
+                            <p>Upload documents first, then start asking questions!</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="chat-status" id="chatStatus">
+                            <span id="statusText">Ready to chat</span>
+                        </div>
+                        <div class="chat-input-group">
+                            <input type="text" id="chatInput" placeholder="Ask a question about your documents..." class="chat-input" onkeypress="handleChatKeypress(event)">
+                            <button class="btn btn-primary" onclick="sendMessage()" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Tab -->
+            <section id="history" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-history"></i> Chat History</h2>
+                    <p>Review your previous conversations</p>
+                </div>
+
+                <div class="history-container">
+                    <div id="historyList" class="history-list">
+                        <p class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            No chat history yet
+                        </p>
+                    </div>
+                    <button class="btn btn-danger" onclick="clearHistory()" id="clearHistoryBtn" style="display: none;">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
