@@ -15,52 +15,107 @@ from langchain_community.document_loaders import BeautifulSoupWebLoader
 
 # file should be uploaded to the server before calling these functions
 
-def pdf_db_creator(file_path):
+def load_pdf(file_path):
     loader = PyPDFLoader(file_path)
-    pdf_documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    pdf_docs = text_splitter.split_documents(pdf_documents)
+    docs = loader.load()
 
-    pdf_db = Chroma.from_documents(pdf_docs, embeddings) 
-    return pdf_db 
+    for doc in docs:
+        doc.metadata["source"] = file_path
+        doc.metadata["source_type"] = "pdf"
 
-def text_db_creator(file_path):
+    return docs 
+
+def load_text(file_path):
     loader = TextLoader(file_path)
-    text_documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    text_docs = text_splitter.split_documents(text_documents)
+    docs = loader.load()
 
-    text_db = Chroma.from_documents(text_docs, embeddings) 
-    return text_db
+    for doc in docs:
+        doc.metadata["source"] = file_path
+        doc.metadata["source_type"] = "text"
 
-def csv_db_creator(file_path):
+    return docs
+
+
+def load_csv(file_path):
     loader = CSVLoader(file_path)
-    csv_documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    csv_docs = text_splitter.split_documents(csv_documents)
+    docs = loader.load()
 
-    csv_db = Chroma.from_documents(csv_docs, embeddings) 
-    return csv_db
+    for doc in docs:
+        doc.metadata["source"] = file_path
+        doc.metadata["source_type"] = "csv"
 
-def json_db_creator(file_path):
+    return docs
+
+
+def load_json(file_path):
     loader = JSONLoader(file_path, jq_schema=".[]")
-    json_documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    json_docs = text_splitter.split_documents(json_documents)
+    docs = loader.load()
 
-    json_db = Chroma.from_documents(json_docs, embeddings) 
-    return json_db
+    for doc in docs:
+        doc.metadata["source"] = file_path
+        doc.metadata["source_type"] = "json"
 
-def wiki_db_creator(wiki_url):  
-    loader = BeautifulSoupWebLoader(wiki_url, soup_strainer=SoupStrainer("p"))
-    wiki_documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    wiki_docs = text_splitter.split_documents(wiki_documents)
+    return docs
 
-    wiki_db = Chroma.from_documents(wiki_docs, embeddings) 
-    return wiki_db
+
+def load_wiki(wiki_url):
+    loader = BeautifulSoupWebLoader(
+        wiki_url,
+        soup_strainer=SoupStrainer("p")
+    )
+    docs = loader.load()
+
+    for doc in docs:
+        doc.metadata["source"] = wiki_url
+        doc.metadata["source_type"] = "wiki"
+
+    return docs
+
+
+def ingest_documents(
+    pdf_files=None,
+    text_files=None,
+    csv_files=None,
+    json_files=None,
+    wiki_links=None,
+    persist_dir="learn_with_ai_db"
+):
+    all_documents = []
+
+    pdf_files = pdf_files or []
+    text_files = text_files or []
+    csv_files = csv_files or []
+    json_files = json_files or []
+    wiki_links = wiki_links or []
+
+    for pdf in pdf_files:
+        all_documents.extend(load_pdf(pdf))
+
+    for txt in text_files:
+        all_documents.extend(load_text(txt))
+
+    for csv in csv_files:
+        all_documents.extend(load_csv(csv))
+
+    for js in json_files:
+        all_documents.extend(load_json(js))
+
+    for link in wiki_links:
+        all_documents.extend(load_wiki(link))
+
+    # Split ALL documents together
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200
+    )
+
+    chunks = splitter.split_documents(all_documents)
+
+    # Create ONE vector DB
+    db = Chroma.from_documents(
+        documents=chunks,
+        embedding=embeddings,
+        persist_directory=persist_dir
+    )
+
+    return db
