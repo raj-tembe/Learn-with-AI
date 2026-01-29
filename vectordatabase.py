@@ -5,15 +5,20 @@ embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-
 
 from langchain_community.text_splitter import RecursiveCharacterTextSplitter 
 
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.document_loaders import TextLoader
-from langchain_community.document_loaders import CSVLoader
+from langchain_community.document_loaders import (
+    PyPDFLoader,
+    TextLoader,
+    CSVLoader,
+    JSONLoader,
+    BeautifulSoupWebLoader
+)
 
 from bs4 import SoupStrainer
-from langchain_community.document_loaders import BeautifulSoupWebLoader
+
 
 
 # file should be uploaded to the server before calling these functions
+# 
 
 def load_pdf(file_path):
     loader = PyPDFLoader(file_path)
