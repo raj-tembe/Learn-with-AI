@@ -111,6 +111,8 @@ USER QUESTION:
 {question}
 
 COACHING RULES:
+- If you find the answer in the context, explain it clearly.
+- If the document lacks the answer, gently inform the user and encourage further exploration.
 - Answer strictly using the provided context.
 - Never add outside knowledge.
 - If the document does not contain the answer, gently explain that and encourage further exploration.
