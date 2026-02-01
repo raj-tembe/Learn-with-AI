@@ -1,19 +1,20 @@
 from langchain_community.vectorstores import Chroma
 
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-from langchain_community.text_splitter import RecursiveCharacterTextSplitter 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_community.document_loaders import (
     PyPDFLoader,
     TextLoader,
     CSVLoader,
     JSONLoader,
-    BeautifulSoupWebLoader
+    WebBaseLoader   # BeautifulSoupWebLoader
 )
 
-from bs4 import SoupStrainer
+# from bs4 import SoupStrainer
 
 
 
@@ -64,9 +65,9 @@ def load_json(file_path):
 
 
 def load_wiki(wiki_url):
-    loader = BeautifulSoupWebLoader(
-        wiki_url,
-        soup_strainer=SoupStrainer("p")
+    loader = WebBaseLoader(
+        wiki_url
+        # soup_strainer=SoupStrainer("p")
     )
     docs = loader.load()
 

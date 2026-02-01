@@ -12,13 +12,13 @@ from datetime import datetime, timedelta
 
 # Load environment variables
 load_dotenv()
-os.environ["GOOGLE_API_KEY"] = os.getenv("GEMINI_API_KEY")
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 os.environ["LANGCHAIN_TRACKING_V2"] = "true"
 
 # Import necessary modules
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_google_genai import ChatGoogleGenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from tones import PROMPT_MAP, LEVELS
 from vectordatabase import ingest_documents
 
@@ -279,10 +279,9 @@ def ask_question():
         prompt = PromptTemplate.from_template(prompt_template)
 
         # Initialize LLM
-        llm = ChatGoogleGenAI(
+        llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-flash",
-            temperature=0.4,
-            top_p=0.95
+            temperature=0.4
         )
 
         # Create chain
