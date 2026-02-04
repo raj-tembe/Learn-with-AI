@@ -54,8 +54,26 @@ def load_csv(file_path):
 
 
 def load_json(file_path):
-    loader = JSONLoader(file_path, jq_schema=".[]")
-    docs = loader.load()
+    import json
+    try:
+        # First, try to validate the JSON file
+        with open(file_path, 'r', encoding='utf-8') as f:
+            json.load(f)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON file {file_path}: {str(e)}")
+    
+    # If valid, use JSONLoader with correct jq schema
+    # Use "." to load the entire JSON, or "[].field" for arrays
+    try:
+        loader = JSONLoader(file_path, jq_schema=".")
+        docs = loader.load()
+    except Exception as e:
+        # Fallback: try to load as array
+        try:
+            loader = JSONLoader(file_path, jq_schema=".[]")
+            docs = loader.load()
+        except Exception:
+            raise ValueError(f"Could not parse JSON file {file_path}: {str(e)}")
 
     for doc in docs:
         doc.metadata["source"] = file_path
@@ -95,19 +113,34 @@ def ingest_documents(
     wiki_links = wiki_links or []
 
     for pdf in pdf_files:
-        all_documents.extend(load_pdf(pdf))
+        try:
+            all_documents.extend(load_pdf(pdf))
+        except Exception as e:
+            raise ValueError(f"Error loading PDF {pdf}: {str(e)}")
 
     for txt in text_files:
-        all_documents.extend(load_text(txt))
+        try:
+            all_documents.extend(load_text(txt))
+        except Exception as e:
+            raise ValueError(f"Error loading text file {txt}: {str(e)}")
 
     for csv in csv_files:
-        all_documents.extend(load_csv(csv))
+        try:
+            all_documents.extend(load_csv(csv))
+        except Exception as e:
+            raise ValueError(f"Error loading CSV file {csv}: {str(e)}")
 
     for js in json_files:
-        all_documents.extend(load_json(js))
+        try:
+            all_documents.extend(load_json(js))
+        except Exception as e:
+            raise ValueError(f"Error loading JSON file {js}: {str(e)}")
 
     for link in wiki_links:
-        all_documents.extend(load_wiki(link))
+        try:
+            all_documents.extend(load_wiki(link))
+        except Exception as e:
+            raise ValueError(f"Error loading wiki link {link}: {str(e)}")
 
     # Split ALL documents together
     splitter = RecursiveCharacterTextSplitter(
