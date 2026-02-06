@@ -284,7 +284,7 @@ llm = ChatGoogleGenAI(
 
 ## 📄 License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the AGPL-3.0 License.
 
 ## 👨‍💻 Contributing
 
@@ -299,7 +299,7 @@ Contributions are welcome! Please feel free to:
 
 For issues, questions, or suggestions:
 - Open an issue on GitHub
-- Email: support@learnwithai.com
+- Email: r4jtembe@gmail.com
 
 ## 🙏 Acknowledgments
 
