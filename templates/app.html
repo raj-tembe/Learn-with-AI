@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}Learn with AI — Study Workspace & AI Tutor{% endblock %}
+
+{% block body_class %}app-body{% endblock %}
+
+{% block content %}
+<div id="app" class="saas-app-layout">
+  <!-- Top Application Bar (Enterprise SaaS Header) -->
+  <header class="app-topbar">
+    <div class="topbar-left">
+      <a href="/" class="topbar-branding" title="Back to Learn with AI Home">
+        <div class="topbar-branding-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <span class="topbar-branding-text">Learn with AI</span>
+      </a>
+
+      <div class="topbar-context" id="topbar-context">
+        <span class="notebook-badge" id="notebook-name">Study Notebook</span>
+        <span class="sources-chip" id="sources-count-chip">
+          <span class="sources-chip-dot"></span>
+          <span id="sources-count">0 sources</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="topbar-search-wrap">
+        <span class="topbar-search-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search notebook &amp; sources... ⌘K"
+        />
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <a href="/" class="button-secondary btn-nav-back" title="Return to product overview">
+        &larr; Home
+      </a>
+      <button id="theme-toggle-btn" class="button-pill-outline btn-icon-only" title="Toggle Theme">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+      <button id="settings-btn" class="button-pill-outline btn-icon-only" title="Workspace Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="app-main-layout">
+    <!-- Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <button id="new-session-btn" class="button-primary sidebar-cta-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New Notebook
+        </button>
+      </div>
+
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Workspace</div>
+          <nav id="main-nav">
+            <div class="sidebar-nav-item active" data-tab="sources">
+              <div class="sidebar-nav-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                  <polyline points="13 2 13 9 20 9"></polyline>
+                </svg>
+              </div>
+              <span>Sources</span>
+            </div>
+            <div class="sidebar-nav-item" data-tab="chat">
+              <div class="sidebar-nav-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <span>AI Tutor &amp; Chat</span>
+            </div>
+            <div class="sidebar-nav-item" data-tab="studio">
+              <div class="sidebar-nav-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+              </div>
+              <span>Study Studio</span>
+            </div>
+          </nav>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Library</div>
+          <nav>
+            <div class="sidebar-nav-item {% if not feature_recent_topics %}disabled-nav-item{% endif %}" data-tab="recent" {% if not feature_recent_topics %}data-disabled="true" onclick="showComingSoonModal('Recent Topics', 'The Recent Topics feature index is currently in preview and will be enabled in an upcoming release.');"{% endif %}>
+              <div class="sidebar-nav-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <span>Recent Topics</span>
+              {% if not feature_recent_topics %}
+                <span class="sidebar-soon-badge">Soon</span>
+              {% endif %}
+            </div>
+            <div class="sidebar-nav-item {% if not feature_saved_summaries %}disabled-nav-item{% endif %}" data-tab="summaries" {% if not feature_saved_summaries %}data-disabled="true" onclick="showComingSoonModal('Saved Summaries', 'The Saved Summaries & Notes repository is currently in preview and will be enabled in an upcoming release.');"{% endif %}>
+              <div class="sidebar-nav-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <span>Saved Summaries</span>
+              {% if not feature_saved_summaries %}
+                <span class="sidebar-soon-badge">Soon</span>
+              {% endif %}
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="reset-session-btn" class="button-pill-outline sidebar-reset-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2-8.83"></path>
+          </svg>
+          Reset Notebook
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <main class="app-workspace">
+      {% include "sources.html" %}
+      {% include "ai_tutor_and_chat.html" %}
+      {% include "study_studio.html" %}
+      {% include "recent_topics.html" %}
+      {% include "saved_summaries.html" %}
+    </main>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- Add Source Modal -->
+<div id="add-source-modal-backdrop" class="modal-backdrop">
+  <div class="modal contact-form-card">
+    <div class="modal-header">
+      <h3 class="modal-header-title">Add Learning Sources</h3>
+      <button class="modal-close-btn" onclick="closeAddSourceModal();">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-subtext">
+        Upload files from your computer or import Wikipedia / public web references.
+      </p>
+
+      <!-- File Upload Zone -->
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-zone-icon">📤</div>
+        <div class="upload-zone-text">Drag &amp; drop learning sources here</div>
+        <div class="upload-zone-subtext">or click to browse local files</div>
+        <div class="upload-zone-formats mono-label">PDF &bull; TXT &bull; CSV &bull; JSON</div>
+        <input type="file" id="file-input" multiple accept=".pdf,.txt,.csv,.json" style="display: none;" />
+      </div>
+
+      <!-- Selected Files -->
+      <div id="selected-files-container" style="margin-top: 16px; display: none;">
+        <div class="mono-label" style="margin-bottom: 8px;">Queued Files</div>
+        <div id="selected-files-list" style="display: flex; flex-direction: column; gap: 6px;">
+          <!-- Staged files rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Upload Progress -->
+      <div id="upload-progress-container" style="margin-top: 16px; display: none;">
+        <div id="upload-progress-items">
+          <!-- Progress items rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Web Source Input -->
+      <div class="web-source-block">
+        <div class="web-source-label">Online Reference / Wikipedia URL</div>
+        <input
+          type="url"
+          id="web-source-input"
+          class="search-input"
+          placeholder="Paste URL (e.g., https://en.wikipedia.org/wiki/Quantum_computing)..."
+        />
+        <div class="text-muted web-source-hint">
+          &check; Wikipedia articles and public web documents supported
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="button-pill-outline" onclick="closeAddSourceModal();">Cancel</button>
+      <button id="upload-btn" class="button-primary">
+        Add Sources
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal-backdrop" class="modal-backdrop">
+  <div class="modal" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3 class="modal-header-title">Workspace Settings</h3>
+      <button class="modal-close-btn" onclick="closeSettingsModal();" aria-label="Close settings">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Theme Selection Toggle -->
+      <div class="settings-theme-row">
+        <div class="settings-theme-info">
+          <div class="settings-section-title" style="margin-bottom: 2px;">Dark Mode</div>
+          <div class="text-muted" style="font-size: 12px;" id="settings-theme-status-text">Switch between light canvas and dark theme</div>
+        </div>
+        <label class="switch-toggle" for="settings-theme-toggle" title="Toggle dark/light theme">
+          <input type="checkbox" id="settings-theme-toggle" />
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <!-- AI Tutor Persona -->
+      <div style="margin-bottom: 24px;">
+        <div class="settings-section-title">AI Tutor Persona</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <label for="settings-tone" class="settings-field-label">Explanatory Tone</label>
+            <select id="settings-tone" class="settings-select">
+              <!-- Options populated dynamically -->
+            </select>
+          </div>
+          <div>
+            <label for="settings-level" class="settings-field-label">Depth &amp; Difficulty Level</label>
+            <select id="settings-level" class="settings-select">
+              <!-- Options populated dynamically -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Management -->
+      <div>
+        <div class="settings-section-title">Session Management</div>
+        <button id="settings-reset-btn" class="btn-danger-outline" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2-8.83"></path></svg>
+          Reset Notebook (Clear Ingested Documents)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Preview Modal -->
+<div id="preview-modal-backdrop" class="modal-backdrop">
+  <div class="modal contact-form-card" style="max-width: 800px;">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-header-title" id="preview-title">Document Title</h3>
+        <div id="preview-meta" class="text-muted" style="font-size: 0.8rem;">PDF Document</div>
+      </div>
+      <button class="modal-close-btn" onclick="closePreviewModal();">&times;</button>
+    </div>
+    <div class="modal-body" id="preview-content">
+      <!-- Preview content rendered dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- Coming Soon Modal -->
+<div id="coming-soon-modal-backdrop" class="modal-backdrop">
+  <div class="modal coming-soon-modal">
+    <div class="modal-header">
+      <div class="coming-soon-badge">
+        <span class="coming-soon-dot"></span> In Active Development
+      </div>
+      <button class="modal-close-btn" onclick="closeComingSoonModal();">&times;</button>
+    </div>
+    <div class="modal-body coming-soon-body">
+      <div class="coming-soon-icon">🚀</div>
+      <h3 id="coming-soon-feature-title" class="coming-soon-title">Feature - Coming Soon...</h3>
+      <p id="coming-soon-feature-desc" class="coming-soon-desc">
+        This capability is currently locked in preview and will be unlocked in an upcoming release.
+      </p>
+      <div class="coming-soon-tag-row">
+        <span class="format-pill">Upcoming Release</span>
+      </div>
+    </div>
+    <div class="modal-footer coming-soon-footer">
+      <button class="button-primary btn-sm" onclick="closeComingSoonModal();">Got it</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

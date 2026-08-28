@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Learn with AI — Private Multi-Document Intelligence{% endblock %}</title>
+  
+  <!-- Typography from Cohere Design System (Space Grotesk, Inter, JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  
+  <!-- Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+  
+  <!-- Markdown & Code Highlighting & KaTeX Math -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13/dist/markdown-it.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/dist/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css" id="hljs-theme" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.15/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.15/dist/contrib/auto-render.min.js"></script>
+
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  
+  {% block content %}{% endblock %}
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Global Scripts -->
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+    if (window.markdownit) {
+      window.md = window.markdownit({
+        html: false,
+        linkify: true,
+        typographer: true,
+        highlight: function (str, lang) {
+          if (lang && hljs.getLanguage(lang)) {
+            try {
+              return hljs.highlight(str, { language: lang }).value;
+            } catch (__) {}
+          }
+          return '';
+        }
+      });
+    }
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

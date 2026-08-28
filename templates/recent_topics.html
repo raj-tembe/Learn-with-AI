@@ -1,0 +1,125 @@
+<!-- Recent Topics Tab Partial -->
+<section id="recent-topics-tab" class="workspace-inner" style="display: none;">
+  <div class="workspace-header">
+    <div class="workspace-title-group">
+      <div class="header-badge-row">
+        {% if feature_recent_topics %}
+          <span class="status-pill status-synced">
+            <span class="status-dot"></span> Session Knowledge Index
+          </span>
+          <span class="meta-pill">Recent Topics &amp; Concept Exploration</span>
+        {% else %}
+          <span class="status-pill status-locked">
+            <span class="status-dot dot-amber"></span> Feature Locked
+          </span>
+          <span class="meta-pill">In Active Development • Coming Soon</span>
+        {% endif %}
+      </div>
+      <h2>Recent Study Topics</h2>
+      <p class="workspace-subtitle">Key concepts, thematic summaries, and recently explored queries across your materials</p>
+    </div>
+    <div class="workspace-header-actions">
+      {% if feature_recent_topics %}
+        <button class="button-pill-outline btn-sm" onclick="switchTab('chat');" title="Open AI Tutor">
+          💬 Ask AI Tutor
+        </button>
+      {% else %}
+        <button class="button-pill-outline btn-sm btn-locked" onclick="showComingSoonModal('Recent Topics', 'The Recent Topics feature index is currently in preview and will be enabled in an upcoming release.');" title="Feature in development">
+          🚀 Coming Soon...
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if not feature_recent_topics %}
+    <!-- Disabled Feature Notification Banner -->
+    <div class="feature-locked-banner" onclick="showComingSoonModal('Recent Topics', 'The Recent Topics feature index is currently in preview and will be enabled in an upcoming release.');">
+      <div class="locked-banner-icon">🔒</div>
+      <div class="locked-banner-content">
+        <div class="locked-banner-title">Feature Preview: Recent Topics (Coming Soon)</div>
+        <div class="locked-banner-desc">Interactive queries are locked until released.</div>
+      </div>
+      <button class="button-pill-outline btn-xs" type="button">
+        View Status
+      </button>
+    </div>
+  {% endif %}
+
+  <div class="recent-topics-container" id="recent-topics-list">
+    {% if feature_recent_topics %}
+      <!-- Active Live Cards -->
+      <div class="topic-card" onclick="askPrompt('Please provide an in-depth breakdown of Quantum Computing and Superposition principles based on my loaded sources.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Physics &amp; Computation</span>
+          <span class="topic-timestamp">Session Active</span>
+        </div>
+        <h3 class="topic-title">Quantum Computing &amp; Qubit Superposition</h3>
+        <p class="topic-desc">Exploration of multi-state quantum bits, phase entanglement, and computational speedups relative to classical bit architectures.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link">Explore in AI Tutor &rarr;</span>
+        </div>
+      </div>
+
+      <div class="topic-card" onclick="askPrompt('Explain the core mathematical theorems and principles extracted from my uploaded documents.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Core Fundamentals</span>
+          <span class="topic-timestamp">Session Active</span>
+        </div>
+        <h3 class="topic-title">Mathematical Principles &amp; Derivations</h3>
+        <p class="topic-desc">Step-by-step review of formal proofs, linear transformations, matrices, and statistical distributions.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link">Explore in AI Tutor &rarr;</span>
+        </div>
+      </div>
+
+      <div class="topic-card" onclick="askPrompt('Generate a comprehensive comparative overview of all topics present in my current knowledge base.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Cross-Synthesis</span>
+          <span class="topic-timestamp">Session Active</span>
+        </div>
+        <h3 class="topic-title">Cross-Disciplinary Comparative Synthesis</h3>
+        <p class="topic-desc">Holistic comparison of research findings, methodologies, experimental designs, and performance benchmarks across all sources.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link">Explore in AI Tutor &rarr;</span>
+        </div>
+      </div>
+    {% else %}
+      <!-- Disabled Anti-Bypass Preview Cards (No Active Handlers) -->
+      <div class="topic-card disabled-feature-card" aria-disabled="true" tabindex="-1" onclick="showComingSoonModal('Recent Topics', 'Recent Topics exploration is disabled and coming soon in an upcoming release.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Physics &amp; Computation</span>
+          <span class="topic-timestamp locked-tag">🔒 Preview Only</span>
+        </div>
+        <h3 class="topic-title">Quantum Computing &amp; Qubit Superposition</h3>
+        <p class="topic-desc">Exploration of multi-state quantum bits, phase entanglement, and computational speedups relative to classical bit architectures.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link disabled-link">🔒 Coming Soon...</span>
+        </div>
+      </div>
+
+      <div class="topic-card disabled-feature-card" aria-disabled="true" tabindex="-1" onclick="showComingSoonModal('Recent Topics', 'Recent Topics exploration is disabled and coming soon in an upcoming release.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Core Fundamentals</span>
+          <span class="topic-timestamp locked-tag">🔒 Preview Only</span>
+        </div>
+        <h3 class="topic-title">Mathematical Principles &amp; Derivations</h3>
+        <p class="topic-desc">Step-by-step review of formal proofs, linear transformations, matrices, and statistical distributions.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link disabled-link">🔒 Coming Soon...</span>
+        </div>
+      </div>
+
+      <div class="topic-card disabled-feature-card" aria-disabled="true" tabindex="-1" onclick="showComingSoonModal('Recent Topics', 'Recent Topics exploration is disabled and coming soon in an upcoming release.');">
+        <div class="topic-card-header">
+          <span class="topic-tag">Cross-Synthesis</span>
+          <span class="topic-timestamp locked-tag">🔒 Preview Only</span>
+        </div>
+        <h3 class="topic-title">Cross-Disciplinary Comparative Synthesis</h3>
+        <p class="topic-desc">Holistic comparison of research findings, methodologies, experimental designs, and performance benchmarks across all sources.</p>
+        <div class="topic-footer">
+          <span class="topic-action-link disabled-link">🔒 Coming Soon...</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>

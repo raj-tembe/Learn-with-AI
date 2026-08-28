@@ -1,0 +1,149 @@
+<!-- Saved Summaries Tab Partial -->
+<section id="saved-summaries-tab" class="workspace-inner" style="display: none;">
+  <div class="workspace-header">
+    <div class="workspace-title-group">
+      <div class="header-badge-row">
+        {% if feature_saved_summaries %}
+          <span class="status-pill status-synced">
+            <span class="status-dot"></span> Saved Study Briefs
+          </span>
+          <span class="meta-pill">Revision &amp; Study Notes</span>
+        {% else %}
+          <span class="status-pill status-locked">
+            <span class="status-dot dot-amber"></span> Feature Locked
+          </span>
+          <span class="meta-pill">In Active Development • Coming Soon</span>
+        {% endif %}
+      </div>
+      <h2>Saved Summaries &amp; Notes</h2>
+      <p class="workspace-subtitle">Review, copy, and export AI-generated study summaries, flashcard sets, and executive briefs</p>
+    </div>
+    <div class="workspace-header-actions">
+      {% if feature_saved_summaries %}
+        <button class="button-pill-outline btn-sm" onclick="switchTab('studio');" title="Generate new study summary in Studio">
+          ✨ Generate in Studio
+        </button>
+      {% else %}
+        <button class="button-pill-outline btn-sm btn-locked" onclick="showComingSoonModal('Saved Summaries', 'The Saved Summaries & Notes repository is currently in preview and will be enabled in an upcoming release.');" title="Feature in development">
+          🚀 Coming Soon...
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if not feature_saved_summaries %}
+    <!-- Disabled Feature Notification Banner -->
+    <div class="feature-locked-banner" onclick="showComingSoonModal('Saved Summaries', 'The Saved Summaries & Notes repository is currently in preview and will be enabled in an upcoming release.');">
+      <div class="locked-banner-icon">🔒</div>
+      <div class="locked-banner-content">
+        <div class="locked-banner-title">Feature Preview: Saved Summaries (Coming Soon)</div>
+        <div class="locked-banner-desc">Summary exports and actions are locked until released.</div>
+      </div>
+      <button class="button-pill-outline btn-xs" type="button">
+        View Status
+      </button>
+    </div>
+  {% endif %}
+
+  <div class="summaries-container" id="saved-summaries-list">
+    {% if feature_saved_summaries %}
+      <!-- Active Live Cards -->
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <div class="summary-card-badge-group">
+            <span class="format-pill">EXECUTIVE SUMMARY</span>
+            <span class="meta-pill">Grounded on Ingested Sources</span>
+          </div>
+          <button class="button-pill-outline btn-xs" onclick="copySummaryText(this);" title="Copy summary to clipboard">
+            📋 Copy
+          </button>
+        </div>
+        <div class="summary-card-body">
+          <h3 class="summary-title">Core Principles &amp; Key Takeaways</h3>
+          <p class="summary-snippet">
+            Comprehensive synthesis outlining central definitions, computational mechanisms, theorems, and comparative takeaways indexed during your active study session.
+          </p>
+        </div>
+        <div class="summary-card-footer">
+          <span class="summary-timestamp">Session Ready</span>
+          <button class="source-action-btn" onclick="askPrompt('Summarize my uploaded sources with bulleted key takeaways, core definitions, and formulas.');">
+            💬 Expand in Chat &rarr;
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <div class="summary-card-badge-group">
+            <span class="format-pill">FORMULA CHEAT SHEET</span>
+            <span class="meta-pill">Mathematical Notation</span>
+          </div>
+          <button class="button-pill-outline btn-xs" onclick="copySummaryText(this);" title="Copy formulas to clipboard">
+            📋 Copy
+          </button>
+        </div>
+        <div class="summary-card-body">
+          <h3 class="summary-title">Mathematical Formulation &amp; Derivations</h3>
+          <p class="summary-snippet">
+            Structured equations, matrix transformations, state vectors, and algorithmic complexity limits formatted for pre-exam review.
+          </p>
+        </div>
+        <div class="summary-card-footer">
+          <span class="summary-timestamp">Session Ready</span>
+          <button class="source-action-btn" onclick="askPrompt('Extract all mathematical formulas, definitions, and equations from my sources with clear explanations.');">
+            💬 Expand in Chat &rarr;
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <!-- Disabled Anti-Bypass Preview Cards (No Active Handlers) -->
+      <div class="summary-card disabled-feature-card" aria-disabled="true" tabindex="-1" onclick="showComingSoonModal('Saved Summaries', 'Saved Summaries is disabled and coming soon in an upcoming release.');">
+        <div class="summary-card-header">
+          <div class="summary-card-badge-group">
+            <span class="format-pill">EXECUTIVE SUMMARY</span>
+            <span class="meta-pill locked-tag">🔒 Preview Only</span>
+          </div>
+          <button class="button-pill-outline btn-xs disabled-btn" type="button" disabled>
+            🔒 Coming Soon
+          </button>
+        </div>
+        <div class="summary-card-body">
+          <h3 class="summary-title">Core Principles &amp; Key Takeaways</h3>
+          <p class="summary-snippet">
+            Comprehensive synthesis outlining central definitions, computational mechanisms, theorems, and comparative takeaways indexed during your active study session.
+          </p>
+        </div>
+        <div class="summary-card-footer">
+          <span class="summary-timestamp">Locked in Preview</span>
+          <button class="source-action-btn disabled-btn" type="button" disabled>
+            🔒 In Development
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-card disabled-feature-card" aria-disabled="true" tabindex="-1" onclick="showComingSoonModal('Saved Summaries', 'Saved Summaries is disabled and coming soon in an upcoming release.');">
+        <div class="summary-card-header">
+          <div class="summary-card-badge-group">
+            <span class="format-pill">FORMULA CHEAT SHEET</span>
+            <span class="meta-pill locked-tag">🔒 Preview Only</span>
+          </div>
+          <button class="button-pill-outline btn-xs disabled-btn" type="button" disabled>
+            🔒 Coming Soon
+          </button>
+        </div>
+        <div class="summary-card-body">
+          <h3 class="summary-title">Mathematical Formulation &amp; Derivations</h3>
+          <p class="summary-snippet">
+            Structured equations, matrix transformations, state vectors, and algorithmic complexity limits formatted for pre-exam review.
+          </p>
+        </div>
+        <div class="summary-card-footer">
+          <span class="summary-timestamp">Locked in Preview</span>
+          <button class="source-action-btn disabled-btn" type="button" disabled>
+            🔒 In Development
+          </button>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>

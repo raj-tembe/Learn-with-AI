@@ -1,0 +1,117 @@
+<!-- Sources Tab Partial -->
+<section id="sources-tab" class="workspace-inner">
+  <!-- Top Action Header -->
+  <div class="workspace-header">
+    <div class="workspace-title-group">
+      <div class="header-badge-row">
+        <span class="status-pill status-synced">
+          <span class="status-dot"></span> In-Memory Vector Store
+        </span>
+        <span id="sources-header-info" class="meta-pill">0 sources loaded</span>
+      </div>
+      <h2>Study Sources &amp; Knowledge Repository</h2>
+    </div>
+    <div class="workspace-header-actions">
+      <button class="button-pill-outline btn-sm" onclick="loadSampleDataset();" title="Load sample dataset">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        Quick Sample
+      </button>
+      <button id="add-source-btn" class="button-primary btn-sm" onclick="openAddSourceModal();">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Add Source
+      </button>
+    </div>
+  </div>
+
+  <!-- Sources Toolbar (Active when docs exist) -->
+  <div id="sources-toolbar" class="sources-toolbar" style="display: none;">
+    <div class="sources-search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input
+        type="text"
+        id="sources-search-input"
+        class="sources-search-input"
+        placeholder="Search loaded documents by name or keyword..."
+      />
+    </div>
+    <div class="sources-toolbar-actions">
+      <span class="selection-status" id="sources-selection-status">Scope: All Sources</span>
+      <button class="button-pill-outline btn-xs" onclick="selectAllSources();">Select All</button>
+      <button class="button-pill-outline btn-xs" onclick="clearSourceFilter();">Reset Scope</button>
+    </div>
+  </div>
+
+  <!-- Sources Grid View -->
+  <div id="sources-list" class="sources-grid-container" style="display: none;">
+    <!-- Document Cards rendered dynamically -->
+  </div>
+
+  <!-- Redesigned Sources Empty State Launchpad -->
+  <div id="sources-empty-state" class="sources-empty-launchpad">
+    <div class="launchpad-badge">
+      <span class="launchpad-badge-dot"></span>
+      <span>GROUNDED KNOWLEDGE BASE</span>
+    </div>
+
+    <h3 class="launchpad-title">Build your Grounded Knowledge Base</h3>
+    <p class="launchpad-desc">
+      Add textbooks, lecture notes, datasets, or Wikipedia references to activate instant semantic search, neural re-ranking, and AI study sessions.
+    </p>
+
+    <!-- Ingestion Action Cards -->
+    <div class="launchpad-grid">
+      <div class="launchpad-card" onclick="openAddSourceModal();">
+        <div class="launchpad-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </div>
+        <div class="launchpad-card-body">
+          <div class="launchpad-card-title">Upload Documents</div>
+          <div class="launchpad-card-sub">PDF, TXT, CSV, JSON</div>
+        </div>
+        <span class="launchpad-card-arrow">&rarr;</span>
+      </div>
+
+      <div class="launchpad-card" onclick="openAddSourceModal('web');">
+        <div class="launchpad-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <div class="launchpad-card-body">
+          <div class="launchpad-card-title">Web References</div>
+          <div class="launchpad-card-sub">Import Wikipedia &amp; web URLs</div>
+        </div>
+        <span class="launchpad-card-arrow">&rarr;</span>
+      </div>
+
+      <div class="launchpad-card launchpad-card-sample" onclick="loadSampleDataset();">
+        <div class="launchpad-card-icon sample-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <div class="launchpad-card-body">
+          <div class="launchpad-card-title">Quick-Start Sample</div>
+          <div class="launchpad-card-sub">Load Quantum Computing demo</div>
+        </div>
+        <span class="launchpad-card-badge">Instant 1-Click</span>
+      </div>
+    </div>
+
+    <!-- Direct Drop Trigger Zone -->
+    <div class="launchpad-drop-hint" onclick="openAddSourceModal();">
+      <div class="drop-hint-left">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        <span>Click or drag files directly anywhere to upload</span>
+      </div>
+      <div class="launchpad-format-tags">
+        <span class="format-pill">PDF</span>
+        <span class="format-pill">TXT</span>
+        <span class="format-pill">CSV</span>
+        <span class="format-pill">JSON</span>
+      </div>
+    </div>
+
+    <!-- Trust & Privacy Security Pill -->
+    <div class="launchpad-footer-note">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <span>Ephemeral session isolation • Zero model training • Auto-deleted on reset</span>
+    </div>
+  </div>
+</section>

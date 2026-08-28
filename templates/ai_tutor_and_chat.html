@@ -1,0 +1,141 @@
+<!-- AI Tutor & Chat Tab Partial -->
+<section id="chat-tab" class="workspace-inner chat-workspace-inner" style="display: none;">
+  <!-- Top Chat Context Header -->
+  <div class="workspace-header chat-header">
+    <div class="workspace-title-group">
+      <div class="header-badge-row">
+        <span class="status-pill status-synced">
+          <span class="status-dot"></span> Neural Cross-Encoder RAG
+        </span>
+        <span id="chat-active-sources-count" class="meta-pill">0 sources active</span>
+      </div>
+      <h2>AI Tutor &amp; Research Assistant</h2>
+    </div>
+
+    <div class="chat-header-controls">
+      <!-- Tone & Level Selectors -->
+      <div class="tone-level-selector">
+        <div class="tone-level-item">
+          <span class="mono-label tone-label">Tone:</span>
+          <select id="tone-selector" class="tone-level-dropdown">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="tone-level-item">
+          <span class="mono-label tone-label">Depth:</span>
+          <select id="level-selector" class="tone-level-dropdown">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <button id="clear-chat-btn" class="button-pill-outline btn-sm" onclick="clearChat();" title="Clear chat history">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Active Grounding Shelf / Knowledge Rail -->
+  <div id="chat-grounding-bar" class="chat-grounding-bar">
+    <div class="grounding-bar-left">
+      <span class="grounding-label">GROUNDED SOURCES:</span>
+      <div id="chat-grounding-chips" class="chat-grounding-chips">
+        <!-- Rendered dynamically as interactive clickable chips -->
+      </div>
+    </div>
+    <button class="grounding-add-btn" onclick="openAddSourceModal();" title="Add another source">
+      + Add Source
+    </button>
+  </div>
+
+  <!-- Chat Stream Messages -->
+  <div id="chat-messages" class="chat-messages-container">
+    <!-- Chat messages rendered dynamically -->
+  </div>
+
+  <!-- Chat Empty State with Quick Starter Prompts -->
+  <div id="chat-empty-state" class="chat-empty-hub">
+    <div class="empty-hub-header">
+      <div class="empty-hub-avatar">✦</div>
+      <h3 class="empty-hub-title">How can I help you study today?</h3>
+      <p class="empty-hub-subtitle">
+        Ask questions across all indexed materials or click a high-yield study workflow below.
+      </p>
+    </div>
+
+    <div class="quick-prompts-title">SUGGESTED STUDY PROMPTS</div>
+    <div class="quick-prompts-grid">
+      <div class="quick-prompt-card" onclick="askPrompt('Please summarize the key concepts, core theorems, and definitions from my uploaded sources.');">
+        <div class="prompt-card-icon">📖</div>
+        <div class="prompt-card-body">
+          <div class="prompt-card-title">Executive Summary</div>
+          <div class="prompt-card-desc">Core concepts, definitions, formulas &amp; key findings</div>
+        </div>
+        <span class="prompt-card-arrow">&rarr;</span>
+      </div>
+
+      <div class="quick-prompt-card" onclick="askPrompt('Explain the most difficult and complex topics in my materials step-by-step with clear examples.');">
+        <div class="prompt-card-icon">🧠</div>
+        <div class="prompt-card-body">
+          <div class="prompt-card-title">Step-by-Step Breakdown</div>
+          <div class="prompt-card-desc">Simplify difficult theorems and complex mechanisms</div>
+        </div>
+        <span class="prompt-card-arrow">&rarr;</span>
+      </div>
+
+      <div class="quick-prompt-card" onclick="askPrompt('Compare and contrast the findings, methodologies, and arguments across all my uploaded documents.');">
+        <div class="prompt-card-icon">📊</div>
+        <div class="prompt-card-body">
+          <div class="prompt-card-title">Comparative Analysis</div>
+          <div class="prompt-card-desc">Cross-document synthesis &amp; methodology comparison</div>
+        </div>
+        <span class="prompt-card-arrow">&rarr;</span>
+      </div>
+
+      <div class="quick-prompt-card" onclick="askPrompt('Generate a 5-question conceptual practice quiz with multiple choice options and detailed answer explanations.');">
+        <div class="prompt-card-icon">📝</div>
+        <div class="prompt-card-body">
+          <div class="prompt-card-title">Practice Quiz</div>
+          <div class="prompt-card-desc">5 challenging multiple-choice questions with answer keys</div>
+        </div>
+        <span class="prompt-card-arrow">&rarr;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Chat Composer Dock -->
+  <div class="chat-composer-dock">
+    <div id="chat-source-filter-badge" class="chat-filter-indicator" style="display: none;">
+      <span class="filter-badge-icon">🎯</span>
+      <span class="mono-label">FOCUS SCOPE:</span>
+      <span id="chat-filter-name">All Documents</span>
+      <button class="filter-clear-btn" onclick="clearSourceFilter();" title="Search all sources">&times;</button>
+    </div>
+    <div class="composer-inner">
+      <textarea
+        id="chat-input"
+        class="chat-composer-input"
+        rows="1"
+        placeholder="Ask a question about your sources (e.g., 'Summarize key findings', 'Explain formula on page 12')..."
+      ></textarea>
+      <div class="chat-composer-actions">
+        <div class="chat-composer-left">
+          <button id="attach-source-btn" class="button-pill-outline btn-xs" onclick="openAddSourceModal();" title="Attach new source">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+            Attach Source
+          </button>
+          <span class="composer-keyboard-hint">
+            <strong>Enter</strong> ↵ send &bull; <strong>Shift+Enter</strong> ↵ newline
+          </span>
+        </div>
+        <div class="chat-composer-right">
+          <button id="send-btn" class="button-primary btn-sm composer-send-btn" onclick="sendMessage();">
+            <span>Send</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
